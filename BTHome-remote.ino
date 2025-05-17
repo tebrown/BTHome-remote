@@ -12,7 +12,7 @@
 #include <AceButton.h>
 
 #define DEVICE_NAME "Family Room Remote"  // The name of the sensor
-#define ENABLE_ENCRYPT // Remove this line for no encryption
+//#define ENABLE_ENCRYPT // Remove this line for no encryption
 String BIND_KEY = "231d39c1d7cc1ab1aee224cd096db932"; // Change this key with a string containing 32 of: a-f and 0-9 characters (hex) this will be asked in HA
 BTHome bthome;
 
