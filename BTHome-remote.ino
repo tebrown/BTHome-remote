@@ -98,6 +98,8 @@ void setup() {
   buttonConfig->setFeature(ButtonConfig::kFeatureDoubleClick);
   buttonConfig->setFeature(ButtonConfig::kFeatureLongPress);
   buttonConfig->setFeature(ButtonConfig::kFeatureRepeatPress);
+  bthome.start();
+
   Serial.println(F("setup(): ready"));
 }
 
@@ -121,7 +123,6 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
   Serial.print(AceButton::eventName(eventType));
   Serial.println();
 
-  bthome.resetMeasurement();
 
   uint16_t btHomeId = EVENT_BUTTON_NONE;
   switch (eventType) {
@@ -145,19 +146,11 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
     case AceButton::kEventHeartBeat:
       return;
   }
-  for (uint16_t i = 0; i < sizeof(INFOS)/sizeof(Info); ++i )
-  {
-    if (i == id) {
-      bthome.addMeasurement_state(EVENT_BUTTON, btHomeId);
-    } else {
-      bthome.addMeasurement_state(EVENT_BUTTON, EVENT_BUTTON_NONE);
-    }
-  }
+  bthome.addMeasurement_state(EVENT_BUTTON, btHomeId);
+
   bthome.addMeasurement_state(ID_BATTERY, 50);
+  bthome.sendPacket(1);
 
-  bthome.sendPacket(0);
-
-  bthome.stop();
   Serial.println("Sending message");
  
 }
