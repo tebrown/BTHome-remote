@@ -123,38 +123,39 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
 
   bthome.resetMeasurement();
 
-  for (uint8_t i = 0; i << sizeof(INFOS)/sizeof(Info); ++i )
+  uint16_t btHomeId = EVENT_BUTTON_NONE;
+  switch (eventType) {
+    case AceButton::kEventPressed:
+      btHomeId = EVENT_BUTTON_PRESS;
+      break;
+    case AceButton::kEventReleased:
+      return;
+    case AceButton::kEventClicked:
+      return;
+    case AceButton::kEventDoubleClicked:
+      btHomeId = EVENT_BUTTON_DOUBLE_PRESS;
+      break;
+    case AceButton::kEventLongPressed:
+      btHomeId = EVENT_BUTTON_LONG_PRESS;
+      break;
+    case AceButton::kEventRepeatPressed:
+      return;
+    case AceButton::kEventLongReleased:
+      return;
+    case AceButton::kEventHeartBeat:
+      return;
+  }
+for (uint16_t i = 0; i < sizeof(INFOS)/sizeof(Info); ++i )
   {
-    uint16_t btHomeId = EVENT_BUTTON_NONE;
     if (i == id) {
-      switch (eventType) {
-        case AceButton::kEventPressed:
-          btHomeId = EVENT_BUTTON_PRESS;
-          break;
-        case AceButton::kEventReleased:
-          break;
-        case AceButton::kEventClicked:
-          break;
-        case AceButton::kEventDoubleClicked:
-          btHomeId = EVENT_BUTTON_DOUBLE_PRESS;
-          break;
-        case AceButton::kEventLongPressed:
-          btHomeId = EVENT_BUTTON_LONG_PRESS;
-          break;
-        case AceButton::kEventRepeatPressed:
-          break;
-        case AceButton::kEventLongReleased:
-          break;
-        case AceButton::kEventHeartBeat:
-          break;
-      }
+      bthome.addMeasurement_state(EVENT_BUTTON, btHomeId);
+    } else {
+      bthome.addMeasurement_state(EVENT_BUTTON, EVENT_BUTTON_NONE);
     }
-    Serial.print(F("Adding state: "));
-    Serial.println(i);
-    bthome.addMeasurement_state(EVENT_BUTTON, btHomeId);
   }
 
   bthome.sendPacket();
   bthome.stop();
+  Serial.println("Sending message");
  
 }
