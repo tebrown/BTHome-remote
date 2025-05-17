@@ -11,14 +11,14 @@
 #include "BTHome.h"
 #include <AceButton.h>
 
-#define DEVICE_NAME "Family Room Remote"  // The name of the sensor
+#define DEVICE_NAME "BTHome-Remote"  // The name of the sensor
 //#define ENABLE_ENCRYPT // Remove this line for no encryption
 String BIND_KEY = "231d39c1d7cc1ab1aee224cd096db932"; // Change this key with a string containing 32 of: a-f and 0-9 characters (hex) this will be asked in HA
 BTHome bthome;
 
 using namespace ace_button;
 #define NUM_BUTTONS    (20)
-
+#define ID_BATTERY		0x01
 #define BTN_POWER      (0)
 #define BTN_BACK       (2)
 #define BTN_HOME       (4)
@@ -145,7 +145,7 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
     case AceButton::kEventHeartBeat:
       return;
   }
-for (uint16_t i = 0; i < sizeof(INFOS)/sizeof(Info); ++i )
+  for (uint16_t i = 0; i < sizeof(INFOS)/sizeof(Info); ++i )
   {
     if (i == id) {
       bthome.addMeasurement_state(EVENT_BUTTON, btHomeId);
@@ -153,8 +153,10 @@ for (uint16_t i = 0; i < sizeof(INFOS)/sizeof(Info); ++i )
       bthome.addMeasurement_state(EVENT_BUTTON, EVENT_BUTTON_NONE);
     }
   }
+  bthome.addMeasurement_state(ID_BATTERY, 50);
 
-  bthome.sendPacket();
+  bthome.sendPacket(0);
+
   bthome.stop();
   Serial.println("Sending message");
  
