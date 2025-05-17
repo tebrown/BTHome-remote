@@ -126,12 +126,12 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
   uint16_t btHomeId = EVENT_BUTTON_NONE;
   switch (eventType) {
     case AceButton::kEventPressed:
-      btHomeId = EVENT_BUTTON_PRESS;
-      break;
+      return;
     case AceButton::kEventReleased:
       return;
     case AceButton::kEventClicked:
-      return;
+      btHomeId = EVENT_BUTTON_PRESS;
+      break;
     case AceButton::kEventDoubleClicked:
       btHomeId = EVENT_BUTTON_DOUBLE_PRESS;
       break;
