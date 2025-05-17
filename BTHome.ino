@@ -119,6 +119,7 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
   Serial.print(id);
   Serial.print(F(".   eventType: "));
   Serial.print(AceButton::eventName(eventType));
+  Serial.println();
 
   bthome.resetMeasurement();
 
@@ -150,7 +151,7 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
     }
     Serial.print(F("Adding state: "));
     Serial.println(i);
-    bthome.addMeasurement_state(i, btHomeId);
+    bthome.addMeasurement_state(EVENT_BUTTON, btHomeId);
   }
 
   bthome.sendPacket();
