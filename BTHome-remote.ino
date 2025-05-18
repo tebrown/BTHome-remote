@@ -15,9 +15,9 @@
 //#define ENABLE_ENCRYPT // Remove this line for no encryption
 String BIND_KEY = "231d39c1d7cc1ab1aee224cd096db932"; // Change this key with a string containing 32 of: a-f and 0-9 characters (hex) this will be asked in HA
 BTHome bthome;
+uint8_t seq = 0;
 
 using namespace ace_button;
-#define NUM_BUTTONS    (20)
 #define ID_BATTERY		0x01
 #define BTN_POWER      (0)
 #define BTN_BACK       (2)
@@ -146,11 +146,22 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t buttonState) {
     case AceButton::kEventHeartBeat:
       return;
   }
-  bthome.addMeasurement_state(EVENT_BUTTON, btHomeId);
+  uint8_t raw[3] = {0,0,0};
+  raw[0] = id;
+  raw[1] = btHomeId;
+  raw[2] = seq++;
+  bthome.addMeasurement(ID_RAW, raw, sizeof(raw));
 
-  bthome.addMeasurement_state(ID_BATTERY, 50);
-  bthome.sendPacket(1);
+  bthome.sendPacket(0);
 
-  Serial.println("Sending message");
- 
+  //bthome.addMeasurement_state(ID_BATTERY, 50);
+  //bthome.sendPacket(0);
+
+  //bthome.addMeasurement_state(EVENT_BUTTON, EVENT_BUTTON_NONE);
+  //bthome.sendPacket(0);
+
+  //Serial.println("Sending message");
+
+  //bthome.addMeasurement_state(EVENT_BUTTON, EVENT_BUTTON_NONE);
+  //bthome.sendPacket(0);
 }
